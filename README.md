@@ -14,4 +14,6 @@ num1 = 1;
 型注釈（関数の引数）
 function add(num1: number, num2:number, showResult:boolean, resultPhrase:string)
 
-
+---
+動画　15：Object型
+基本的には余計な型注釈は避けて、型推論に任せる
