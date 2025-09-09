@@ -15,5 +15,10 @@ num1 = 1;
 function add(num1: number, num2:number, showResult:boolean, resultPhrase:string)
 
 ---
-動画　15：Object型
+動画15：Object型
 基本的には余計な型注釈は避けて、型推論に任せる
+
+---
+動画16：Array型
+型推論が強力に働くのでこれも基本的には推論にまかせてOK
+const scores = [99, 80, 95];        // → number[]
