@@ -37,7 +37,21 @@ JavaScriptになくTypeScriptのみ
 関連する定数をひとまとめにできる　可読性、型安全性
 
 ---
-動画19：any型
+動画20：any型
 何でも入る柔軟な型
 使用は避ける
 TypeScriptが用意した本当にわからないときの最終手段
+
+---
+動画21、22：Union & Literal型
+Union-複数の型のいずれか
+Literal-具体的な１つの値そのものを型とする
+
+よく使うのがリテラルユニオン（Enumとも近い）
+
+今回のコード
+function combine(
+  input1: number | string,
+  input2: number | string,
+  resultConversion: "as-nunmber" | "as-string"
+)
