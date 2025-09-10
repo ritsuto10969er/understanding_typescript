@@ -1,12 +1,13 @@
-// const person:{
-//     name: string,
-//     age: number,
-// } = 
-
-const person = {
+const person: {
+    name:string,
+    age:number,
+    hobbies:string[],
+    role:[number, string]
+} = {
     name: 'Ritsu',
     age: 21,
     hobbies: ['soccer', 'moter-bike'],
+    role: [2, 'author']
 };
 
 let favoriteActivities: string[];
