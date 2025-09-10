@@ -1,11 +1,8 @@
-// const person:{
-//     name: string,
-//     age: number,
-// } = 
 var person = {
     name: 'Ritsu',
     age: 21,
     hobbies: ['soccer', 'moter-bike'],
+    role: [2, 'author']
 };
 var favoriteActivities;
 favoriteActivities = ['cooking', 'touring'];
