@@ -1,30 +1,24 @@
-type Combinable = number | string;
-type ComversionDescriptor = 'as-number' | 'as-string';
-
-function combine(
-  input1: Combinable,
-  input2: Combinable,
-  resultConversion: ComversionDescriptor,
-) {
-  let result;
-
-  if (
-    (typeof input1 === "number" && typeof input2 === "number") ||
-    resultConversion === "as-number"
-  ) {
-    result = +input1 + +input2;
-  } else {
-    result = input1.toString() + input2.toString();
-  }
-
-  return result;
+function add(num1: number, num2: number) {
+    return num1 + num2;
 }
 
-const combinedAges = combine(30, 26, "as-number");
-console.log(combinedAges);
+function printResult(num: number) {
+    console.log('Result: ' + num);
+}
 
-const combinedStringAges = combine("30", "26", "as-number");
-console.log(combinedStringAges);
+function addAndHandle(n1: number, n2: number, cb: (nm: number) => void) {
+    const result = n1 + n2;
+    cb(result);
+}
 
-const combinedNames = combine("Ritsuto", "Kosaka", "as-string");
-console.log(combinedNames);
+addAndHandle(10, 20, (result) => {
+    console.log(result);
+});
+
+let combinValues: (a: number, b: number) => number;
+combinValues = add;
+// combinValues = printResult;
+console.log(combinValues(8, 8));
+
+
+printResult(add(5, 6));
