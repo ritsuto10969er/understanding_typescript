@@ -1,18 +1,11 @@
-function add(num1, num2) {
-    return num1 + num2;
+var userInput;
+var userName;
+userInput = 5;
+userInput = 'max';
+if (typeof userInput === 'string') {
+    userName = userInput;
 }
-function printResult(num) {
-    console.log('Result: ' + num);
+function generateError(message, code) {
+    throw { message: message, errorCode: code };
 }
-function addAndHandle(n1, n2, cb) {
-    var result = n1 + n2;
-    cb(result);
-}
-addAndHandle(10, 20, function (result) {
-    console.log(result);
-});
-var combinValues;
-combinValues = add;
-// combinValues = printResult;
-console.log(combinValues(8, 8));
-printResult(add(5, 6));
+generateError('エラーが発生しました', 500);

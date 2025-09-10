@@ -1,24 +1,15 @@
-function add(num1: number, num2: number) {
-    return num1 + num2;
+let userInput: unknown;
+let userName: string;
+
+userInput = 5;
+userInput = 'max';
+
+if(typeof userInput === 'string') {
+    userName = userInput;
 }
 
-function printResult(num: number) {
-    console.log('Result: ' + num);
+function generateError(message: string, code: number) {
+    throw { message: message, errorCode: code };
 }
 
-function addAndHandle(n1: number, n2: number, cb: (nm: number) => void) {
-    const result = n1 + n2;
-    cb(result);
-}
-
-addAndHandle(10, 20, (result) => {
-    console.log(result);
-});
-
-let combinValues: (a: number, b: number) => number;
-combinValues = add;
-// combinValues = printResult;
-console.log(combinValues(8, 8));
-
-
-printResult(add(5, 6));
+generateError('エラーが発生しました', 500);
