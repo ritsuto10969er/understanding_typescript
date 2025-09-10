@@ -55,3 +55,11 @@ function combine(
   input2: number | string,
   resultConversion: "as-nunmber" | "as-string"
 )
+
+---
+動画22：型エイリアス
+自分自身の型を設定
+型の名前を説明的にし可読性を上げる
+
+一番上で一回定義すればいいので再利用性も高い
+例）type 型の名前 = まとめたい型
