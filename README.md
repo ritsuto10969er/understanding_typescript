@@ -29,3 +29,9 @@ TypeScript独自の型　配列に長さと型を指定したバージョン
 let user ['string', 'number']
 user = ['Ritsu', 22] -> 正解
 user = [22, 'Ritsu'] -> 間違い　逆
+
+---
+動画18：enum型
+列挙型
+JavaScriptになくTypeScriptのみ
+関連する定数をひとまとめにできる　可読性、型安全性
