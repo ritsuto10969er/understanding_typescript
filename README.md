@@ -19,19 +19,19 @@ function add(num1: number, num2:number, showResult:boolean, resultPhrase:string)
 基本的には余計な型注釈は避けて、型推論に任せる
 
 ---
-動画16：Array型
+動画17：Array型
 型推論が強力に働くのでこれも基本的には推論にまかせてOK
 const scores = [99, 80, 95];        // → number[]
 
 ---
-動画17：Tuple型
+動画18：Tuple型
 TypeScript独自の型　配列に長さと型を指定したバージョン
 let user ['string', 'number']
 user = ['Ritsu', 22] -> 正解
 user = [22, 'Ritsu'] -> 間違い　逆
 
 ---
-動画18：enum型
+動画19：enum型
 列挙型
 JavaScriptになくTypeScriptのみ
 関連する定数をひとまとめにできる　可読性、型安全性
