@@ -1,4 +1,12 @@
 # understanding_typescript
+-- Section3: TypeScriptの設定とコンパイラ
+動画33,34
+Watchモード　プロジェクト全体のコンパイル
+*command
+tsc --init 最初に初期化　1回のみ　tsconfig.jsonを作成
+tsc.tsのファイル全てコンパイル
+tsc -w　でwatchmode
+
 -- Section2: TypeScriptの基本と型
 動画10~14
 
