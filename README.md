@@ -1,4 +1,15 @@
 # understanding_typescript
+-- Section4: 新しい世代のJavaScriptとTypeScript
+動画54,55
+レストパラメーター（残余引数）
+可変長の引数を受け取る仕組み
+(...numbers: number[])　→　任意個の引数(number)を渡せる
+
+分割代入(destructuring)
+配列の値やオブジェクトのプロパティを個別の変数に展開できる
+データの取り出しをより簡単に
+const { プロパティ名 } = オブジェクト;
+
 -- Section3: TypeScriptの設定とコンパイラ
 動画33,34
 Watchモード　プロジェクト全体のコンパイル
