@@ -1,4 +1,30 @@
 # understanding_typescript
+-- Section5: クラスとインターフェース
+動画57~71
+**抽象クラス 
+abstract class クラス名
+子クラスへ継承するためのみでインスタンス化(new)できない
+具体的なメソッドは不可でメソッドの型のみを設計、子クラスで強制
+
+**静的クラス static
+インスタンスでなくクラスそのものに属するメンバー　(new)する必要がない
+呼び方 ClassName. staticMember
+thisの扱い方の違い
+static this -> クラスそのもの
+インスタンスメソッド内のthis -> そのメソッドを呼び出したインスタンス
+
+**superとは
+親クラスのコンストラクタやメソッドを呼ぶためのキーワード
+コンストラクタでの super(...)
+メソッドでの super.method()
+
+**getter ans setter
+getter: 読み取り時のロジック,
+        必ず値を返す、返さない場合 undefined or 例外
+setter: 書き込み時のロジック
+        基本的に引数は1つ、普通に二つ以上はメソッドにする
+
+
 -- Section4: 新しい世代のJavaScriptとTypeScript
 動画54,55
 レストパラメーター（残余引数）
