@@ -1,127 +1,62 @@
-//abstractクラスはインスタンス化できない
-//継承されるためだけのもの
-abstract class Department {
-    static fiscalYear = 2020;
-    // private id: string;
-    // name: string;
-    protected employees: string[] = [];
-
-    static createEmployee(name: string ) {
-        return {name: name};
-    }
-
-    constructor(protected readonly id: string, public name: string) {
-        // this.name = n;
-    }
-    
-    abstract describe(this: Department): void;
-
-    addEmployee(employee: string) {
-        //validation etc...
-        this.employees.push(employee);
-    }
-
-    printEmployeeInformation() {
-        console.log(this.employees.length);
-        console.log(this.employees);
-    }
-};
-
-class ITDepartment extends Department {
-    admins: string[];
-    constructor(id:string, admins:string[]) {
-        super(id, 'IT'); //super??
-        this.admins = admins;
-    }
-
-    describe() {
-        console.log('IT部門  ID - ' + this.id);
-    }
-};
-
-class AccountingDepartment extends Department {
-    private lastReport: string | undefined;
-    private static instance: AccountingDepartment; //型がこのクラスのオブジェクトって？？
-
-    //一般的には対象となるプロパティに近い名前
-    //getterは何かを返さなければならない、カプセル化のようなもの
-    get mostRecentReport() {
-        if(this.lastReport) {
-            return this.lastReport;
-        }
-
-        throw new Error('There is no report');
-    }
-    
-    set mostRecentReport(value: string) {
-        if(!value) {
-            throw new  Error("Set a correct value");
-        }
-
-        this.addReports(value);
-    }
-
-    private constructor(id: string, private reports: string[]) {
-        super(id, 'Accounting');
-        this.lastReport = reports[0];
-    }
-
-    static getInstance() {
-        if(AccountingDepartment.instance) {
-            return this.instance; //static内なのでthisはこのクラスを指す？？
-        }
-
-        this.instance = new AccountingDepartment('D2', []);
-        return this.instance;
-    }
-
-    describe() {
-        console.log('会計部門  ID - ' + this.id);
-    }
-
-    addReports(text: string) {
-        this.reports.push(text);
-        this.lastReport = text;
-    }
-
-    printReports() {
-        console.log(this.reports);
-    }
-
-    addEmployee(name: string): void {
-        if(name === 'Max') {
-            return
-        }
-        
-        this.employees.push(name);
-    
-    }
+//interfaceで関数型も定義できる
+// type AddFn = (a: number, b: number) => number;
+interface AddFn {
+    (a: number, b: number): number;
 }
 
-const employee1 = Department.createEmployee('max');
-console.log(employee1, Department.fiscalYear);
+let add: AddFn;
 
-const IT = new ITDepartment('D1', ['Ritsuto']);
-// console.log(accounting);
-IT.describe();
+add = (n1: number, n2: number) => {
+    return n1 + n2;
+}
 
-IT.addEmployee('Ritsu');
-IT.addEmployee('Mina');
+//interface -> オブジェクトがどんな形なのか定義するもの
+//objectの設計図でなく、単にオリジナルの型を定義するのみ？
+interface Named {
+    readonly name?: string; //readonlyのみ
+}
 
-// accounting.employees[2] = 'Nori';
-IT.printEmployeeInformation();
+//interfaceは複数継承可能、最終的にはマージされるから？
+interface Greetable extends Named {
+    greet(phrase: string): void; //voidって何だっけ？
+    outputNanme?: string; //optionalのプロパティ
+}
 
+class Person implements Greetable {
+    name?: string;
+    age = 22;
+    constructor(n?: string) { //costructorの引数もoptionalにすることが可能
+        if(n) {
+            this.name = n;
+        }
+    }
 
-// const accounting = new AccountingDepartment('D2', []);
-const accounting = AccountingDepartment.getInstance();
-accounting.mostRecentReport = '特別会計レポート';
-accounting.addReports('something');
-console.log(accounting.mostRecentReport);
-// accounting.printReports();
+    greet(phrase: string) {
+        if(this.name) {
+            console.log(phrase + ' ' + this.name);
+        } else {
+            console.log('Hi!')
+        }
+        
+    }
 
-accounting.addEmployee('Max');
-accounting.addEmployee('Nori');
+}
 
-accounting.describe();
-// accounting.printEmployeeInformation();
+let user1: Greetable;
 
+user1 = new Person();
+
+// user1 = {
+//     name: 'Ritsu',
+//     // age: 22,
+//     greet(phrase: string) {
+//         console.log(phrase + " I'm " + this.name);
+//     }
+// }
+
+//このuser1はPersonのインターフェースを満たす形である→OK
+user1.greet('Hello!');
+console.log(user1)
+//なぜインターフェースが便利なのか？
+//共通の機能（インターフェース）を複数のクラスに強制的に持たせることができる？？
+add(4, 5);
