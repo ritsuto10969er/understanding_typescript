@@ -1,5 +1,33 @@
 # understanding_typescript
--- Section5: クラスとインターフェース
+-- Section5: インターフェース
+動画72~79
+オブジェクト、クラス、関数の型（構造）を定義
+クラスのこういうプロパティやメソッドを持つべきという約束（契約）
+
+関数型とinterface
+type AddFnA = (a: number, b: number) => number;
+interface AddFnB { (a: number, b: number): number }
+
+let add: AddFnB = (n1, n2) => n1 + n2;
+どちらも同等に使える
+宣言マージを使う、拡張予定→interface
+
+プロパティ修飾子
+?optional修飾子→省略可
+readonly->再代入不可
+
+継承→extends
+classの実装→implementsで実装可
+マージ宣言→同名のinterfaceをあとから足すと結合される
+
+なぜ便利？
+
+複数クラスに共通の契約を課せる（多態性）。
+
+依存を抽象化できる（テスト/差し替え容易）。
+
+拡張しやすい（宣言マージ、extends）。
+-- Section5: クラス
 動画57~71
 **抽象クラス 
 abstract class クラス名
