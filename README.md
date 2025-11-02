@@ -1,33 +1,21 @@
 # understanding_typescript
--- Section5: インターフェース
-動画72~79
-オブジェクト、クラス、関数の型（構造）を定義
-クラスのこういうプロパティやメソッドを持つべきという約束（契約）
+-- Section6: 高度な型
+**tsconfig.jsonの変更
+  "noUnusedLocals": false,
+  "noUnusedParameters": false,
+  →'p2' is declared but its value is never read.のエラーが出なくなる
+  開発時はtrueにすべき
 
-関数型とinterface
-type AddFnA = (a: number, b: number) => number;
-interface AddFnB { (a: number, b: number): number }
+  高度な型
+  ⇒実行前にバグをつぶす、設計意図を型で表す、変更に強いコードにする
+  Union Type どれか一つ許可 A or B
+  Intersection Type 合成 A and B
+  Type Guards 型ごとに分岐 type of / instance of / in
+  Type Casting 型を伝えるだけ as ~
+  keyof / Indexed Access Types 型のキーと値 keyofとT[K]の組み合わせ
+  Conditional Types　if文みたいな感じ
 
-let add: AddFnB = (n1, n2) => n1 + n2;
-どちらも同等に使える
-宣言マージを使う、拡張予定→interface
-
-プロパティ修飾子
-?optional修飾子→省略可
-readonly->再代入不可
-
-継承→extends
-classの実装→implementsで実装可
-マージ宣言→同名のinterfaceをあとから足すと結合される
-
-なぜ便利？
-
-複数クラスに共通の契約を課せる（多態性）。
-
-依存を抽象化できる（テスト/差し替え容易）。
-
-拡張しやすい（宣言マージ、extends）。
--- Section5: クラス
+-- Section5: クラスとインターフェース
 動画57~71
 **抽象クラス 
 abstract class クラス名
