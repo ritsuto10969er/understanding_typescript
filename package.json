@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "lite-server"
+    "start": "lite-server",
+    "postinstall": "node scripts/ensure-rx-entrypoint.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
     "lite-server": "^2.6.1"
   },
   "dependencies": {
+    "rx": "^4.1.0",
     "typescript": "^5.9.3"
   }
 }
