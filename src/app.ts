@@ -1,183 +1,104 @@
-//高度な型
-type Admin =  {
-    name: string,
-    privileges: string[],
+//Generics -- ある意味何か二つを統合したもの？
+//型安全性の向上と自動補完のサポート
+const names: Array<string> = []; // string[]
+
+const promise: Promise<string> = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve("It's done")
+    }, 2000);
+})
+//promiseについては返す型を判定できる
+
+promise.then(data => {
+    data.split(' ');
+})
+
+//Generic Function
+function merge<T extends object, U extends object>(objA: T, objB: U) { //交差型を返り値として推論
+    return Object.assign(objA, objB)
+}
+//T,UのgenericsでmergedObjの型推論がnameとageのプロパティがあることを理解
+const mergedObj = merge({name: 'Ritsu'}, {age: 22});
+// mergedObj.name;  プロパティnameにアクセスできない 型推論はobjectになっているなんで？
+console.log(mergedObj);
+//interfaceって何のためにあるんだっけ？
+interface Lengthy {
+    length: number;
+}
+//genericsは型は厳格に指定しないけど一定の制限を設けるとき？
+function countAndDescribe<T extends Lengthy>(element: T) {
+    let descriptionText = '値がありません';
+    if(element.length > 0 ) {
+        descriptionText = '値は' + element.length + 'です。';
+    }
+    return [element]
 }
 
-type Employee = {
-    name: string,
-    startDate: Date,
+console.log(countAndDescribe("おつかれさまです"))
+
+function extractAndCOnvert<T extends object, U extends keyof T> (obj: T, key: U) {
+    return 'value: ' + obj[key];
 }
 
-// interface ElevatedEmployee extends Admin, Employee {}
-type ElevatedEmployee = Admin & Employee; //交差型
-//e1はAdmin,Employeeの両方のプロパティを持つ必要がある？？
-const e1: ElevatedEmployee = {
-    name: 'Ritsu',
-    privileges: ['aiueo'],
-    startDate: new Date(),
-}
+extractAndCOnvert({name: 'Ritsu'}, 'name');
 
-//型ガード　type guard
-//Union型の時に役立つ　どの型が変数や定数に入ってるか知りたいとき
-type Combinable = string | number;
-type Numeric = number | boolean;
-type Universal = Combinable & Numeric;
+//このクラスでは型が統一されていることのみを保証したい
+class DataStrage<T extends string | number | boolean> {
+    private data: T[] = [];
 
-// Universal is the intersection of Combinable and Numeric, which results in 'number'
-const universalValue: Universal = 42;
-
-console.log('ElevatedEmployee:', e1);
-console.log('Universal value:', universalValue);
-
-//function overload
-function add(a: number, b: number): number; //これでadd(number, nubmer)の時は戻り値の型推論がnumberになる
-function add(a: string, b: string): string; //ここまで型推論を正確にする意味は？？
-function add(a: number, b: string): string;
-function add(a: string, b: number): string;
-function add(a: Combinable, b: Combinable) {
-    //Type Guard - typeofを使うパターン
-    //typeofはコンパイルされた後？？
-    if(typeof a === 'string' || typeof b === 'string') {
-        return a.toString() + b.toString();
+    addItem(item:T) {
+        this.data.push(item);
     }
 
-    return a + b;
-}
-//↑このコードの問題点、typescriptが戻り値を正しく推論できない
-//下の戻り値の型推論がstrign | numberになってる
-//引数がnumber, numberっだと戻り値はnumberのはず
-add('aiu', 'eo');
+    removeItem(item:T) {
+        if(this.data.indexOf(item) === -1) {
+            return;
+        }
+        
+        this.data.splice(this.data.indexOf(item), 1); //.spliceってなんだっけ？
+    }
 
-type UnknownEmployee = Admin | Employee;
-
-function printEmployeeInformation(emp: UnknownEmployee) {
-    console.log(emp.name);
-    //ここでは何でtypeofが使えないのか？？
-    //Type Guard - inを使うパターン
-    //型定義のプロパティを検証できる？　typeofとの違いは？
-    if('privileges' in emp) {
-        console.log(emp.privileges);
-    } 
-
-    if('startDate' in emp) {
-        console.log(emp.startDate);
+    getItems() {
+        return [... this.data];
     }
 }
 
-printEmployeeInformation(e1); //Type Guardにより実行できる
-// printEmployeeInformation({name: 'Mina', startDate: new Date()})
+const textStrage = new DataStrage<string>();
+textStrage.addItem('data1');
+textStrage.addItem('data2');
+textStrage.addItem('data3');
+textStrage.removeItem('data2');
 
-class Car {
-    drive() {
-        console.log('車を運転中')
-    }
+console.log(textStrage.getItems());
+
+// const objStrage = new DataStrage<object>(); //objectはリファレンス型だからうまくいかない？？
+// const obj1 = {name: 'Ritsu', age: 22};
+// objStrage.addItem(obj1);
+// objStrage.addItem({name: 'Mina', age: 20});
+// objStrage.removeItem(obj1);
+// console.log(objStrage.getItems());
+//このクラスはプリミティブ用だからリファレンス用のクラスを作成する方が良い
+
+//Genericsのユーティリティ
+
+interface courseGoal{
+    title: string;
+    description: string;
+    completeUntil: Date;
 }
 
-class Truck {
-    drive() {
-        console.log('トラックを運転中')
-    }
-
-    loadCargo(amount: number) {
-        console.log('積載中' + amount)
-    }
+function createCourseGoal(title: string, description: string, completeUntil: Date): courseGoal {
+    let courseGoal:Partial<courseGoal> = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = completeUntil;
+    return courseGoal as courseGoal;
 }
 
-type Vehicle = Car | Truck; //Union
+//PartialはcourseGoalで必要なプロパティをすべてoptionalにする？
 
-const v1 = new Car();
-const v2 = new Truck();
-
-function useVehicle(vehicle: Vehicle) {
-    vehicle.drive();
-    //Type Guard - instanceofのパターン
-    //class内のプロパティ検？？？？
-    //interfaceの時は使えない？？
-    if(vehicle instanceof Truck) {
-        vehicle.loadCargo(100);
-    }
-}
-
-useVehicle(v1);
-useVehicle(v2);
-
-//Descriminated Unions 判別可能なUnion型
-
-interface Bird {
-    type: 'bird'; //実際の値でない　literal型
-    flyingSpeed:number;
-}
-
-interface Horse {
-    type: 'horse';
-    runningSpeed: number;
-}
-
-type Animal = Bird | Horse;
-
-function moveAnimal(animal: Animal) {
-    // if('flyingSpeed' in animal) {
-    //     console.log(animal.flyingSpeed); //interfaceが増えるたびにifを増やさなければいけないのが面倒->Descriminated Unions
-    // }
-
-    let speed;
-    switch (animal.type) {
-        case 'bird':
-            speed = animal.flyingSpeed;
-            break;
-        case 'horse':
-            speed = animal.runningSpeed;
-    }
-
-    console.log('移動速度：' + speed);
-}
-
-moveAnimal({type: 'bird', flyingSpeed: 10}); //ここはなんで{}？
+const people: Readonly<string[]> = ['anna', 'max'];
+// people.push('manu'); <-操作できなくする
 
 
-//型キャスト
-const p1 = document.querySelector('p'); //ここでは型推論が HTMLParagraphElement | null
-const p2 = document.getElementById('paragraph') //ここの型推論は HTMLElement | null
-
-// const userInput = <HTMLInputElement>document.getElementById('userInput')!; //ここの型推論は HTMLElement | null
-// const userInput = <HTMLInputElement>document.getElementById('userInput')!; //ここの型推論は HTMLElement | null
-//この<>の書き方はReactのJSXと構文がかぶってるからダブってるから避けたほうがいい？ 
-const userInput = document.getElementById('userInput')! as HTMLInputElement;
-userInput.value = 'aiueo';
-
-//index type 例）なんかしらの入力を受け取る
-//どのようなプロパティが事前にわからない->index型が便利？
-interface ErrorContainer {
-    [prop: string]: string;
-} //オブジェクトにしたいからinterfaceを使う？
-
-const errorBag: ErrorContainer = {
-    email: '正しいメールアドレスではありません',
-    username: '正しい名前ではありません'
-}
-
-//Optional Chaining ネストされたプロパティいに安全にアクセスできる、実行時エラーにならない
-//なんでこれがバックエンドからデータをフェッチするときに便利？
-const fetchedUserData = {
-    id: 'ui',
-    name: 'Ritsu',
-    job: {
-        title: 'developper',
-        descripttion: 'typescript'
-    }
-}
-
-console.log(fetchedUserData?.job?.title);
-
-//Null合体演算子
-const userInput1 = undefined;
-const storedData = userInput1 ?? 'DEFAULT';
-// ||との違い,falsyで引っかかるかどうか？
-// ||値がfalsyだとすべて引っかかる->DEFAULTを出力？
-// ?? null or undefined
-
-console.log(storedData);
-
-
-
+//Generics or Union これらの違いは？使い分け方は？

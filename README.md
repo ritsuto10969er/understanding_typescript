@@ -1,4 +1,21 @@
 # understanding_typescript
+--Section7: Generics
+## メタ
+- 日付: <2025/11/02~2025/11>
+- ブランチ: `feat/ts/sec07-generics`
+- マージ先: `track/<topic>-<yyyy-mm>`
+- 参照: <[Udemy Link](https://www.udemy.com/course/understanding-typescript-jp/learn/lecture/20181720#overview)>
+
+## 1. このセクションで絶対に押さえること
+- ...Genericsとは再利用可能な（様々な型に対して動作する）コンポーネントを作成できるようにする仕組み
+- ... 
+- ...
+
+## 2. 規則・パターン
+- ...
+- ...
+- ...
+
 -- Section6: 高度な型
 **tsconfig.jsonの変更
   "noUnusedLocals": false,
