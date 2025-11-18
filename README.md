@@ -1,6 +1,43 @@
 # understanding_typescript
 --Section7: Generics
 ## メタ
+- 日付: <2025/11/08~2025/11/ >
+- ブランチ: `feat/ts/sec07-generics`
+- マージ先: `track/ts-2025-11`
+
+## 1. このセクションで絶対に押さえること
+- ...decratorsはただの関数
+- ...decorator factoryの引数はクロージャでなかのdecoratorsでも参照可能
+- ...decoratorsはコンストラクタを置き換えることが許されている使用になっている
+
+## 2. 規則・パターン
+- ① デコレーターの種類ごとの“シグネチャ（関数の形）”
+1. クラスデコレーター
+function Decorator(constructor: Function) {}
+
+2. プロパティデコレーター
+function Decorator(target: any, propertyKey: string | symbol) {}
+
+3. メソッドデコレーター
+function Decorator(target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {}
+
+4. アクセサデコレーター
+
+（メソッドと全く同じ）
+
+(target, propertyKey, descriptor)
+
+5. パラメータデコレーター
+function Decorator(target: any, propertyKey: string | symbol, parameterIndex: number) {}
+- ② “target の中身” の規則（めっちゃ重要・固定ルール）
+種類	target に入るもの
+インスタンスメンバ	Class.prototype
+static メンバ	Class（コンストラクタ）
+クラスデコレーター	なし（constructorが第1引数として渡る）
+- ...
+
+--Section7: Generics
+## メタ
 - 日付: <2025/11/02~2025/11>
 - ブランチ: `feat/ts/sec07-generics`
 - マージ先: `track/<topic>-<yyyy-mm>`
