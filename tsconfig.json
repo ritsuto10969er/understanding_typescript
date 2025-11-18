@@ -42,5 +42,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "noEmitOnError": true,
-  }
+    "experimentalDecorators": true,
+  },
+  "files": ["src/app.ts"]
 }

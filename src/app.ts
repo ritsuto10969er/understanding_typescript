@@ -1,104 +1,204 @@
-//Generics -- ある意味何か二つを統合したもの？
-//型安全性の向上と自動補完のサポート
-const names: Array<string> = []; // string[]
+//Decorators -> 一般的にクラスにつける？　そして最終的にはただの関数になるの？
 
-const promise: Promise<string> = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve("It's done")
-    }, 2000);
-})
-//promiseについては返す型を判定できる
-
-promise.then(data => {
-    data.split(' ');
-})
-
-//Generic Function
-function merge<T extends object, U extends object>(objA: T, objB: U) { //交差型を返り値として推論
-    return Object.assign(objA, objB)
-}
-//T,UのgenericsでmergedObjの型推論がnameとageのプロパティがあることを理解
-const mergedObj = merge({name: 'Ritsu'}, {age: 22});
-// mergedObj.name;  プロパティnameにアクセスできない 型推論はobjectになっているなんで？
-console.log(mergedObj);
-//interfaceって何のためにあるんだっけ？
-interface Lengthy {
-    length: number;
-}
-//genericsは型は厳格に指定しないけど一定の制限を設けるとき？
-function countAndDescribe<T extends Lengthy>(element: T) {
-    let descriptionText = '値がありません';
-    if(element.length > 0 ) {
-        descriptionText = '値は' + element.length + 'です。';
+//Targetがクラスなので引数が一つ必要？？
+function Logger(logString:string) {
+    return function(constructor: Function) {
+        console.log(logString);
+        console.log(constructor);
     }
-    return [element]
 }
 
-console.log(countAndDescribe("おつかれさまです"))
+function WithTemplate(template: string, hookId: string) {
+    return function <T extends {new(...args: any[]): {name: string}}>(originalConstructor: T) {
+        return class extends originalConstructor {
+            constructor(..._: any[]) {
+                super(); //オリジナルのコンストラクターを呼び出す？
+                console.log('テンプレ表示')
+            const hookEL =document.getElementById(hookId);
+            if(hookEL) {
+                hookEL.innerHTML = template;
+                hookEL.querySelector('h1')!.textContent = this.name;
+            }
 
-function extractAndCOnvert<T extends object, U extends keyof T> (obj: T, key: U) {
-    return 'value: ' + obj[key];
-}
-
-extractAndCOnvert({name: 'Ritsu'}, 'name');
-
-//このクラスでは型が統一されていることのみを保証したい
-class DataStrage<T extends string | number | boolean> {
-    private data: T[] = [];
-
-    addItem(item:T) {
-        this.data.push(item);
-    }
-
-    removeItem(item:T) {
-        if(this.data.indexOf(item) === -1) {
-            return;
+            }
         }
-        
-        this.data.splice(this.data.indexOf(item), 1); //.spliceってなんだっけ？
-    }
-
-    getItems() {
-        return [... this.data];
     }
 }
 
-const textStrage = new DataStrage<string>();
-textStrage.addItem('data1');
-textStrage.addItem('data2');
-textStrage.addItem('data3');
-textStrage.removeItem('data2');
+//デコレーターはクラスが定義されたときに実行 インスタンス化の時ではない
+//デコレーターファクトリーを使うことで引数を受け取れる
+//デコレーター内の関数を返す
+//デコレーターの実行順序は？
+// @Logger('ログ出力中 - Person')
+@WithTemplate('<h1>Personオブジェクト</h1>', 'app')
+class Person {
+    name = 'Ritsu';
 
-console.log(textStrage.getItems());
+    constructor() {
+        console.log('Personオブジェクトを作成中…')
+    }
+}
 
-// const objStrage = new DataStrage<object>(); //objectはリファレンス型だからうまくいかない？？
-// const obj1 = {name: 'Ritsu', age: 22};
-// objStrage.addItem(obj1);
-// objStrage.addItem({name: 'Mina', age: 20});
-// objStrage.removeItem(obj1);
-// console.log(objStrage.getItems());
-//このクラスはプリミティブ用だからリファレンス用のクラスを作成する方が良い
+const pers = new Person(); //そういえばここに()が必要なのは何でだっけ？
+console.log(pers);
 
-//Genericsのユーティリティ
+//デコレーターは必ずクラスが必要だが、必ずしもクラスで実行する必要はない？？
+//インスタンスのプロパティに追加するとそのプロトタイプになる？
+//スタティックのプロパティに追加するとコンストラクターになる？
 
-interface courseGoal{
+function Log(target: any, propatyName: string | Symbol) {
+    console.log('プロパティデコレーター');
+    console.log(target, propatyName);
+}
+
+function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('アクセサーデコレーター');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+}
+
+function Log3(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('メソッドデコレーター');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+}
+
+function Log4(target: any, name: string | Symbol, position: number) {
+    console.log('パラメーターデコレーター');
+    console.log(target);
+    console.log(name);
+    console.log(position);
+}
+
+class Product {
+    @Log
     title: string;
-    description: string;
-    completeUntil: Date;
+    private _price: number;
+
+    @Log2
+    set price(val: number) {
+        if(val > 0) {
+            this._price = val;
+        } else {
+            throw new Error ('不正な価格です')
+        }
+    }
+
+    constructor(t: string, p: number) {
+        this.title = t;
+        this._price = p;
+    }
+
+    @Log3
+    getPriceWithTax(@Log4 tax: number) {
+        return this._price * (1 + tax);
+    }
 }
 
-function createCourseGoal(title: string, description: string, completeUntil: Date): courseGoal {
-    let courseGoal:Partial<courseGoal> = {};
-    courseGoal.title = title;
-    courseGoal.description = description;
-    courseGoal.completeUntil = completeUntil;
-    return courseGoal as courseGoal;
+function Autobind(target: any, methodName: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+    const adjDescriptor: PropertyDescriptor = {
+        configurable: true,
+        enumerable: false,
+        get() {
+            const boundFn = originalMethod.bind(this);
+            return boundFn;
+        }
+    }
+    return adjDescriptor;
+}
+//mehtodデコレーターはpropertydescriptorの設定を値として返せる？
+
+class Printer {
+    message = 'Clicked';
+
+    @Autobind
+    showMessage() {
+        console.log(this.message);
+    }
 }
 
-//PartialはcourseGoalで必要なプロパティをすべてoptionalにする？
+const p = new Printer();
 
-const people: Readonly<string[]> = ['anna', 'max'];
-// people.push('manu'); <-操作できなくする
+const button = document.querySelector('button')!;
+button.addEventListener('click', p.showMessage);
+
+//デコレーターのバリデーション
+
+interface ValidatorConfig{
+    [prop: string]: {
+        [validatableProp: string]: string[] //['required', 'positive']
+    }
+}
+
+const registerdValidators: ValidatorConfig = {};
+
+function Required(target: any, propName: string) {
+    registerdValidators[target.constructor.name] = {
+        ...registerdValidators[target.constructor.name],
+        [propName]: ['required'],
+    }
+}
+
+function Positive(target: any, propName: string) {
+    registerdValidators[target.constructor.name] = {
+        ...registerdValidators[target.constructor.name],
+        [propName]: ['positive'],
+    }
+}
+
+function validate(obj: any) {
+    const objValidatorConfig = registerdValidators[obj.constructor.name];
+    if(!objValidatorConfig) {
+        return true;
+    }
+    let isValid = true;
+    for (const prop in objValidatorConfig) {
+        for (const validator of objValidatorConfig[prop]) {
+            switch (validator) {
+                case 'requiresd':
+                    isValid = isValid && !!obj[prop];
+                    break;
+                case 'positive':
+                    isValid = isValid && obj[prop] > 0;
+                    break;
+            }
+        }
+    }
+    return true;
+
+}
 
 
-//Generics or Union これらの違いは？使い分け方は？
+class Course {
+    @Required
+    title: string;
+    @Positive
+    price: number;
+
+    constructor(t: string, p: number) {
+        this.title = t;
+        this.price = p;
+    }
+}
+
+const courseForm = document.querySelector('form')!;
+courseForm.addEventListener('submit', evt => {
+    evt.preventDefault();
+    const titleEl = document.getElementById('title') as HTMLInputElement;
+    const priceEL = document.getElementById('price') as HTMLInputElement;
+
+    const title = titleEl.value;
+    const price = +priceEL.value;
+
+    const createdCourse = new Course(title, price);
+
+    if(!validate(createdCourse)) {
+        alert('正しくにゅうりょくしてください');
+        return;
+    }
+    console.log(createdCourse);
+
+})
