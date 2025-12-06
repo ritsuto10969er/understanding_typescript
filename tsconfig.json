@@ -7,7 +7,7 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "esnext",
+    "module": "es2015",
     "target": "es6",
     "types": [],
     // For nodejs:
@@ -36,10 +36,10 @@
     "strict": true,
     "strictNullChecks": false,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
+    "verbatimModuleSyntax": false,
+    "isolatedModules": false,
+    "noUncheckedSideEffectImports": false,
+    "moduleDetection": "auto",
     "skipLibCheck": true,
     "noEmitOnError": true,
     "experimentalDecorators": true,
