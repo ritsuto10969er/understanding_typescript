@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "lite-server",
-    "postinstall": "node scripts/ensure-rx-entrypoint.js"
+    "postinstall": "node scripts/ensure-rx-entrypoint.js",
+    "build": "webpack ---config webpack.config.prof.js"
   },
   "repository": {
     "type": "git",
@@ -19,10 +20,15 @@
   },
   "homepage": "https://github.com/ritsuto10969er/understanding_typescript#readme",
   "devDependencies": {
-    "lite-server": "^2.6.1"
+    "clean-webpack-plugin": "^4.0.0",
+    "lite-server": "^2.6.1",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "webpack": "^5.103.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
-    "rx": "^4.1.0",
-    "typescript": "^5.9.3"
+    "rx": "^4.1.0"
   }
 }

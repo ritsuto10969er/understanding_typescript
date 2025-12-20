@@ -1,7 +1,7 @@
-import { Draggable } from '../models/dd-interfaces.js';
-import { Component } from './base-component.js';
-import { Project } from '../models/project.js';
-import { Autobind } from '../decorators/autobind.js';
+import { Draggable } from '../models/dd-interfaces';
+import { Component } from './base-component';
+import { Project } from '../models/project';
+import { Autobind } from '../decorators/autobind';
 
 export class ProjectItem
   extends Component<HTMLUListElement, HTMLLIElement>
